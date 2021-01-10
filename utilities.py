@@ -1,9 +1,17 @@
+import argparse
 import os
 import csv
 import json
 import logging
 import sys
 from configparser import ConfigParser
+
+
+def is_positive(value):
+    if int(value) <= 0:
+        raise argparse.ArgumentTypeError("%s value must be greater than 0!" % int(value))
+    logging.debug("is_positive(", value, ") called, returned,", int(value))
+    return int(value)
 
 
 def json_export(sheep, wolf, round_no, directory):
@@ -61,7 +69,6 @@ def parse_config(file):
         raise ValueError("Number is not positive")
     logging.debug("parse_config(", file, ") called, returned,", float(init), float(sheep), float(wolf))
     return float(init), float(sheep), float(wolf)
-
 
 # def parse_values(args):
 #     if args.config_file:

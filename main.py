@@ -16,24 +16,20 @@ def main():
     directory = None
     wait = False
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description='''The program conducts simulation of wolf and sheep. ''',
+        epilog="""Program made by Robert Makrocki and Pawel Bucki 2021.""")
+
     parser.add_argument('-c', '--config', help='Set configuration file', metavar='FILE', dest='config_file',
                         action='store')
     parser.add_argument('-d', '--dir', help='Select destination for log files', metavar='DIR', dest='directory',
                         action='store')
-    parser.add_argument('-h', '--help', default=argparse.SUPPRESS, directory='help',
-                        help='Synopsis\n'
-                             'main [ -c --config config_file ] [ -d --dir directory ] [ -h --help ] '
-                             '[ -l --log log_file ] [ -r --rounds round_no ] [ -s --sheep number_of_sheep ] '
-                             '[ -w --wait ]\n\n'
-                             'Summary\n'
-                             'The program conducts simulation of wolf and sheep.\n')
     parser.add_argument('-l', '--log', help='Create event log file with LEVEL of event', metavar='LEVEL',
                         dest='log_file', action='store')
     parser.add_argument('-r', '--rounds', help='Select number of rounds', metavar='NUM', dest='round_no',
-                        type=long, choices=range(1, 9223372036854775807), action='store')
+                        type=is_positive, action='store')
     parser.add_argument('-s', '--sheep', help='Select number of sheep', metavar='NUM', dest='number_of_sheep',
-                        type=long, choices=range(1, 9223372036854775807), action='store')
+                        type=is_positive, action='store')
     parser.add_argument('-w', '--wait', help='Set pause between rounds', action='store_true')
 
     args = parser.parse_args()
@@ -42,8 +38,6 @@ def main():
         init_pos_limit, sheep_move_dist, wolf_move_dist = parse_config(args.config_file)
     if args.directory:
         directory = args.directory
-    if args.help:
-        help = args.help
     if args.log_file:
         if args.log_file == "DEBUG":
             lvl = logging.DEBUG

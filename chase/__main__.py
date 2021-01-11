@@ -31,7 +31,6 @@ def main():
     parser.add_argument('-w', '--wait', help='Set pause between rounds', action='store_true')
 
     args = parser.parse_args()
-    # parse_values(args)
     if args.config_file:
         init_pos_limit, sheep_move_dist, wolf_move_dist = parse_config(args.config_file)
     if args.directory:

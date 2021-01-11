@@ -7,12 +7,6 @@ import sys
 from configparser import ConfigParser
 
 
-def is_positive(value):
-    if int(value) <= 0:
-        raise argparse.ArgumentTypeError("%s value must be greater than 0!" % int(value))
-    logging.debug("is_positive(", value, ") called, returned,", int(value))
-    return int(value)
-
 
 def json_export(sheep, wolf, round_no, directory):
     logging.debug("json_export(", sheep.__str__(), wolf.__str__(), round_no, str(directory), ")")
@@ -70,31 +64,10 @@ def parse_config(file):
     logging.debug("parse_config(", file, ") called, returned,", float(init), float(sheep), float(wolf))
     return float(init), float(sheep), float(wolf)
 
-# def parse_values(args):
-#     if args.config_file:
-#         init_pos_limit, sheep_move_dist, wolf_move_dist = parse_config(args.config_file)
-#     if args.directory:
-#         directory = args.directory
-#     if args.help:
-#         sys.exit()
-#     if args.log_file:
-#         if args.log_file == "DEBUG":
-#             lvl = logging.DEBUG
-#         elif args.log_file == "INFO":
-#             lvl = logging.INFO
-#         elif args.log_file == "WARNING":
-#             lvl = logging.WARNING
-#         elif args.log_file == "ERROR":
-#             lvl = logging.ERROR
-#         elif args.log_file == "CRITICAL":
-#             lvl = logging.CRITICAL
-#         else:
-#             raise ValueError("Invalid log level!")
-#         logging.basicConfig(level=lvl, filename="chase.log")
-#         logging.debug("debug")
-#     if args.round_no:
-#         round_no = args.round_no
-#     if args.number_of_sheep:
-#         number_of_sheep = args.number_of_sheep
-#     if args.wait:
-#         wait = args.wait
+
+# check if passed value is positive
+def is_positive(value):
+    if int(value) <= 0:
+        raise argparse.ArgumentTypeError("%s value must be greater than 0!" % int(value))
+    logging.debug("is_positive(", value, ") called, returned,", int(value))
+    return int(value)

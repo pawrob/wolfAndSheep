@@ -10,6 +10,7 @@ class Sheep:
         self.dist_to_wolf = 0.0
 
     def move(self, sheep_move_dist):
+        # generate direction for sheep and move
         direction = random.randint(0, 3)
         if direction == 0:
             self.y += sheep_move_dist

@@ -2,73 +2,75 @@ from chase.wolf import Wolf
 from chase.sheep import Sheep
 from chase.utilities import *
 import random
-import math
 import logging
 
 
-def simulation_process(round_no, number_of_sheep, init_pos_limit, sheep_move_dist, wolf_move_dist, directory, wait):
+def simulation_process(round_no, number_of_sheep, init_pos_limit, sheep_move_dist, wolf_move_dist, directory,
+                       wait_flag):
     logging.debug("simulation_process(", round_no, number_of_sheep, init_pos_limit, sheep_move_dist, wolf_move_dist,
-                  str(directory), wait, ") called")
+                  str(directory), wait_flag, ") called")
+    # wolf nad sheep init
     wolf = Wolf(0.0, 0.0)
     sheep = arrange(number_of_sheep, init_pos_limit)
+
+    # iterate over rounds
     for i in range(1, round_no + 1):
-        alive_sheep = ([x for x in sheep if x.is_alive])
+        # fill array with only alive sheep
+        alive_sheep = collect_alive_sheep(sheep)
+
+        # check if any of sheep are alive
         if not alive_sheep:
             print("All sheep are eaten!")
             break
+
         for j in alive_sheep:
-            # move sheep
+            # sheep moves
             j.move(sheep_move_dist)
-            # calculate distance to nearest sheep form wolf
-            j.dist_to_wolf = nearest_sheep(j, wolf)
-        nearest = min(alive_sheep, key=lambda shp: shp.dist_to_wolf)
-        if nearest.dist_to_wolf <= wolf_move_dist:
-            wolf.x = nearest.x
-            wolf.y = nearest.y
-            nearest.is_alive = False
-        if nearest.dist_to_wolf > wolf_move_dist:
-            x_an = wolf_move_dist * ((nearest.x - wolf.x) / nearest.dist_to_wolf)
-            y_an = wolf_move_dist * ((nearest.y - wolf.y) / nearest.dist_to_wolf)
-            wolf.x += x_an
-            wolf.y += y_an
-            logging.info("Wolf moved to position: " + str(wolf.x) + str(wolf.y))
-        if nearest.is_alive:
+            # calculate distance from sheep to wolf
+            j.dist_to_wolf = wolf.nearest_sheep(j)
+
+        # choose nearest sheep
+        nearest_sheep = min(alive_sheep, key=lambda shp: shp.dist_to_wolf)
+        # kill sheep or mow to the nearest one
+        wolf.move_or_kill(nearest_sheep, wolf_move_dist)
+        # check if nearest sheep is still alive
+        if nearest_sheep.is_alive:
             print("Turn:", i, "\tWolf position: %.3f %.3f" % (wolf.x, wolf.y), "\tRemaining sheep:",
                   alive_sheep.__len__())
             logging.info("Turn: " + str(i) + "\tWolf position: " + str(wolf.x) + ", " + str(wolf.y) +
                          "\tRemaining sheep: " + str(alive_sheep.__len__()))
+        # if not print it out
         else:
-            x = nearest.sheep_number
             print("Turn:", i, "\tWolf position: %.3f %.3f" % (wolf.x, wolf.y), "\tRemaining sheep:",
-                  alive_sheep.__len__(), "\tSheep", x, "died")
+                  alive_sheep.__len__(), "\tSheep", nearest_sheep.sheep_number, "died")
+
             logging.info("Turn: " + str(i) + "\tWolf position: " + str(wolf.x) + ", " + str(wolf.y) +
-                         "\tRemaining sheep: " + str(alive_sheep.__len__()) + "\tSheep " + str(x) + "died")
+                         "\tRemaining sheep: " + str(alive_sheep.__len__()) + "\tSheep " + str(
+                nearest_sheep.sheep_number) + "died")
+
+        # export to json file
         json_export(sheep, wolf, i, directory)
+        # export to csv file
         csv_export(i, alive_sheep.__len__())
-        if wait:
+        # check if -w option was selected
+        if wait_flag:
             input("Press a key to continue...")
 
 
 def arrange(number_of_sheep, init_pos_limit):
     sheep = []
-    for i in range(number_of_sheep):
+    for i in range(number_of_sheep):  # generate position for sheep
         sheep.append(Sheep(random.uniform(-init_pos_limit, init_pos_limit),
                            random.uniform(-init_pos_limit, init_pos_limit)))
-        sheep[i].sheep_number = i + 1
+        sheep[i].sheep_number = i + 1  # assign number to sheep
     logging.debug("arrange(" + str(number_of_sheep) + str(init_pos_limit) + ") called, returned " + str(sheep))
     return sheep
 
 
-def no_of_sheep_alive(sheep):
-    alive_count = 0
-    for x in sheep:
-        if x.is_alive:
-            alive_count += 1
-    logging.debug("no_of_sheep_alive(" + str(sheep.__str__()) + ") called, returned " + str(alive_count))
-    return alive_count
-
-
-def nearest_sheep(sheep, wolf):
-    euclidean_distance = math.sqrt(((sheep.x - wolf.x) ** 2) + ((sheep.y - wolf.y) ** 2))
-    logging.debug("nearest_sheep(" + sheep.__str__() + wolf.__str__() + ") called, returned " + str(euclidean_distance))
-    return euclidean_distance
+def collect_alive_sheep(sheep):
+    alive_sheep = []
+    for i in sheep:
+        if i.is_alive:  # check if sheep is still alive
+            alive_sheep.append(i)  # put it to the list
+    logging.debug("no_of_sheep_alive(" + str(sheep.__str__()) + ") called, returned " + str(alive_sheep))
+    return alive_sheep

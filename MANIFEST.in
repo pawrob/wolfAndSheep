@@ -1,0 +1,3 @@
+include LICENSE
+include README
+include chase/config_file.ini

@@ -1,2 +1,2 @@
 # wolfAndSheep
-Project for python basics, somulation of wolf and sheep
+Project for python basics, simulation of wolf and sheep

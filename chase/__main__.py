@@ -1,7 +1,5 @@
-from numpy import long
-
-from simulation import simulation_process
-from utilities import *
+from chase.simulation import simulation_process
+from chase.utilities import *
 import os
 import random
 import argparse

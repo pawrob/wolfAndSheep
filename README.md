@@ -1,7 +1,7 @@
 # wolfAndSheep
 Project for python basics, simulation of wolf and sheep
 # Introduction
-Program simulates bunch of sheep in natural envirement chased by wolf. Every round wolf want to kill one sheep.<br/> If there is no sheep in his range, wolf goes to the nearest sheep.
+Program simulates bunch of sheep in natural envirement chased by wolf. Every round wolf want to kill one sheep.<br/> If there is no sheep in his range, wolf goes to the nearest sheep. Game stops if there isnt any alive sheep or all rounds are over.
 ## Technologies
 Project is created with:
 * Setuptools

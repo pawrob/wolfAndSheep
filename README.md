@@ -25,7 +25,7 @@ InitPosLimit<br/>
 SheepMoveDist<br/>
 WolfMoveDist<br/>
 * -d, --dir - Select destination for log files
-* -l, --log, Create event log file with LEVEL of event ( DEBUG, INFO, WARNING, ERROR, CRITICAL)
-* -r, --rounds, Select number of rounds
-* -s, --sheep, Select number of sheep
-* -w, --wait, Set pause between rounds
+* -l, --log - Create event log file with LEVEL of event ( DEBUG, INFO, WARNING, ERROR, CRITICAL)
+* -r, --rounds - Select number of rounds
+* -s, --sheep - Select number of sheep
+* -w, --wait - Set pause between rounds
